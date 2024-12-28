@@ -7,17 +7,17 @@ export default function Header() {
         <nav className="py-3 bg-light">
             <ul className="d-flex justify-content-evenly align-items-center list-unstyled m-0 px-3 ">
                 <li>
-                    <Link to="/" className="text-decoration-none text-dark ">
+                    <Link to="/" className="text-decoration-none  menu">
                         Home
                     </Link>
                 </li>
                 <li>
-                    <Link to="/about" className="text-decoration-none text-dark ">
+                    <Link to="/about" className="text-decoration-none  menu">
                         About
                     </Link>
                 </li>
                 <li>
-                    <Link to="/weather" className="text-decoration-none text-dark ">
+                    <Link to="/weather" className="text-decoration-none  menu">
                         Weather
                     </Link>
                 </li>

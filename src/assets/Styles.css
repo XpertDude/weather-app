@@ -5,7 +5,14 @@
     text-align: center;
 }
 
-.hover{
+.menu{
+    padding: 10px;
+    color: black;
+}
+
+.menu:hover{
+    background-color: gray;
     color: white;
-    background-color: blue;
+    border-radius: 5%;
+    transition: all 0.2s ease-in-out;
 }
