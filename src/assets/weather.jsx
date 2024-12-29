@@ -96,27 +96,37 @@ ShowWeatherInfoPlus.propTypes = {
 
 export default function Weather() {
     const [data, setData] = useState({});
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
     const [city, setCity] = useState("");
     const [searchValue, setValue] = useState("");
     const [loading, setLoading] = useState(false);
     const [view, setView] = useState("day");
+    console.log(error);
+    
     useEffect(() => {
-        if (city.toLocaleLowerCase()) {
+        if (city && city.trim() !== "") {
             setLoading(true);
             fetch(
-                `https://api.weatherapi.com/v1/forecast.json?key=b0bfa1b3c9f94066b4e112918242512&q=${city ? city : alert('city not match')}&days=7&aqi=yes&alerts=no`
+                `https://api.weatherapi.com/v1/forecast.json?key=b0bfa1b3c9f94066b4e112918242512&q=${city}&days=7&aqi=yes&alerts=no`
             )
                 .then((response) => response.json())
                 .then((data) => {
-                    setData(data);
-                    setLoading(false);
+                    if (data.error) {
+                        setError(data.error.message);
+                        setLoading(false);
+                    } else {
+                        setData(data);
+                        setLoading(false);
+                        setError('');
+                    }
                 })
                 .catch((error) => {
-                    setError(error);
+                    setError(error.message);
+                    console.log(error.message);
                     setLoading(false);
                 });
         }
+        
     }, [city]);
 
     const loadingSpinner = () => {
@@ -160,18 +170,23 @@ export default function Weather() {
         </div>
     }
 
+const showError = () => {
+    return <>
+    {!error == '' && <div
+                className="alert alert-danger"
+                role="alert"
+            >
+                <strong>{error}</strong>
+            </div>}
+    </>
+}
+
     return (
         <>
             <Header />
             <h1>Weather Information</h1>
             <hr />
-            {error && <div
-                className="alert alert-danger"
-                role="alert"
-            >
-                <strong>{error}</strong>
-            </div>} 
-            
+            {showError()}
             {loading? loadingSpinner(): undefined}
             <div className="d-flex gap-2 flex-row justify-content-between p-1">
                 <div className="d-flex gap-2">
