@@ -70,13 +70,11 @@ export default function Weather() {
     const [searchValue, setValue] = useState("");
     const [loading, setLoading] = useState(false);
     const [view, setView] = useState("day");
-    console.log(view);
-
     useEffect(() => {
         if (city.toLocaleLowerCase()) {
             setLoading(true);
             fetch(
-                `https://api.weatherapi.com/v1/forecast.json?key=b0bfa1b3c9f94066b4e112918242512&q=${city}&days=7&aqi=yes&alerts=no`
+                `https://api.weatherapi.com/v1/forecast.json?key=b0bfa1b3c9f94066b4e112918242512&q=${city? city: alert('city not match')}&days=7&aqi=yes&alerts=no`
             )
                 .then((response) => response.json())
                 .then((data) => {
