@@ -32,6 +32,7 @@ export function ForecastDays({ data }) {
         </>
     );
 }
+console.log(ForecastDays.propTypes);
 
 ForecastDays.propTypes = {
     data: PropTypes.shape({
