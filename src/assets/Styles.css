@@ -16,3 +16,12 @@
     border-radius: 5%;
     transition: all 0.2s ease-in-out;
 }
+
+.loading{
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    top: 50%;
+    color: red;
+}

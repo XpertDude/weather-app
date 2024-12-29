@@ -3,35 +3,7 @@ import "./Styles.css";
 import Header from "./header";
 import { useEffect, useState } from "react";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-
-export function ShowWeatherInfoPlus({ data }) {
-    if (!data) return <p>No data available.</p>;
-
-    return (
-        <div className="d-flex flex-wrap justify-content-between align-items-stretch gap-2 bg-white">
-            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">Humidity:
-                <p className="fs-small">{data.humidity}%</p><p>{data.humidity > 20 && data.humidity > 50? 'Comfortable👍': 'Too dry👎'}</p>
-            </div>
-            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">UV Index:
-                <p className="fs-small">{data.uv}</p><p>{data.uv <= 5? 'Good🙂‍↔️': 'Bad😨'}</p>
-            </div>
-            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">Visibility:
-                <p className="fs-small">{data.vis_km} Km</p><p>{data.vis_km <= 10? 'Acceptable🙂' : 'Poor🫣'}</p>
-            </div>
-            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">Air Quality:
-                <p className="fs-small text-secondary">{data.air_quality?.["us-epa-index"]}</p><p>{data.air_quality?.["us-epa-index"] <= 4? 'Healthy🙂‍↕️':'Unhealthy😷'}</p>
-            </div>
-            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-2 flex-fill">Wind Speed:
-                <p className="fs-small">{data.wind_kph} Kph,<br />({data.wind_mph} mph)</p><p><i className="bi bi-compass text-primary"></i>{data.wind_dir}</p>
-            </div>
-            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-2 flex-fill">Pressure:
-                <p className="fs-small"><i class="bi bi-moisture text-primary"></i> <br />{data.pressure_mb} mb,<br />({data.pressure_in}in)</p>
-            </div>
-        </div>
-
-    );
-}
-
+import PropTypes from 'prop-types';
 
 export function ForecastDays({ data }) {
     if (!data?.forecastday) return <p>No forecast data available.</p>;
@@ -61,7 +33,65 @@ export function ForecastDays({ data }) {
     );
 }
 
+ForecastDays.propTypes = {
+    data: PropTypes.shape({
+        forecastday: PropTypes.arrayOf(
+            PropTypes.shape({
+                date: PropTypes.string.isRequired,
+                day: PropTypes.shape({
+                    condition: PropTypes.shape({
+                        icon: PropTypes.string.isRequired,
+                        text: PropTypes.string.isRequired,
+                    }).isRequired,
+                    avgtemp_c: PropTypes.number.isRequired,
+                    mintemp_c: PropTypes.number.isRequired,
+                }).isRequired,
+            })
+        ).isRequired,
+    }).isRequired,
+};
 
+export function ShowWeatherInfoPlus({ data }) {
+    if (!data) return <p>No data available.</p>;
+
+    return (
+        <div className="d-flex flex-wrap justify-content-between align-items-stretch gap-2 bg-white">
+            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">Humidity:
+                <p className="fs-small">{data.humidity}%</p><p>{data.humidity > 20 && data.humidity > 50 ? 'Comfortable👍' : 'Too dry👎'}</p>
+            </div>
+            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">UV Index:
+                <p className="fs-small">{data.uv}</p><p>{data.uv <= 5 ? 'Good🙂‍↔️' : 'Bad😨'}</p>
+            </div>
+            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">Visibility:
+                <p className="fs-small">{data.vis_km} Km</p><p>{data.vis_km <= 10 ? 'Acceptable🙂' : 'Poor🫣'}</p>
+            </div>
+            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-3 flex-fill">Air Quality:
+                <p className="fs-small text-secondary">{data.air_quality?.["us-epa-index"]}</p><p>{data.air_quality?.["us-epa-index"] <= 4 ? 'Healthy🙂‍↕️' : 'Unhealthy😷'}</p>
+            </div>
+            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-2 flex-fill">Wind Speed:
+                <p className="fs-small">{data.wind_kph} Kph,<br />({data.wind_mph} mph)</p><p><i className="bi bi-compass text-primary"></i>{data.wind_dir}</p>
+            </div>
+            <div className="d-flex flex-column justify-content-center border rounded p-4 gap-2 flex-fill">Pressure:
+                <p className="fs-small"><i className="bi bi-moisture text-primary"></i> <br />{data.pressure_mb} mb,<br />({data.pressure_in}in)</p>
+            </div>
+        </div>
+
+    );
+}
+
+ShowWeatherInfoPlus.propTypes = {
+    data: PropTypes.shape({
+        humidity: PropTypes.number,
+        uv: PropTypes.number,
+        vis_km: PropTypes.number,
+        air_quality: PropTypes.object,
+        wind_kph: PropTypes.number,
+        wind_mph: PropTypes.number,
+        wind_dir: PropTypes.string,
+        pressure_mb: PropTypes.number,
+        pressure_in: PropTypes.number,
+    }).isRequired,
+};
 
 export default function Weather() {
     const [data, setData] = useState({});
@@ -74,7 +104,7 @@ export default function Weather() {
         if (city.toLocaleLowerCase()) {
             setLoading(true);
             fetch(
-                `https://api.weatherapi.com/v1/forecast.json?key=b0bfa1b3c9f94066b4e112918242512&q=${city? city: alert('city not match')}&days=7&aqi=yes&alerts=no`
+                `https://api.weatherapi.com/v1/forecast.json?key=b0bfa1b3c9f94066b4e112918242512&q=${city ? city : alert('city not match')}&days=7&aqi=yes&alerts=no`
             )
                 .then((response) => response.json())
                 .then((data) => {
@@ -88,6 +118,13 @@ export default function Weather() {
         }
     }, [city]);
 
+    const loadingSpinner = () => {
+        return <>
+            <div className="spinner-border loading" role="status">
+                <span className="sr-only"></span>
+            </div>
+        </>
+    }
     const handleViewChange = (view) => {
         setView(view);
     };
@@ -127,6 +164,14 @@ export default function Weather() {
             <Header />
             <h1>Weather Information</h1>
             <hr />
+            {error && <div
+                className="alert alert-danger"
+                role="alert"
+            >
+                <strong>{error}</strong>
+            </div>} 
+            
+            {loading? loadingSpinner(): undefined}
             <div className="d-flex gap-2 flex-row justify-content-between p-1">
                 <div className="d-flex gap-2">
                     <button
