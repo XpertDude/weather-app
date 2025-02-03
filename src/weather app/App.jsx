@@ -9,7 +9,7 @@ import ShowWeatherInfoPlus from "./ShowWeatherInfoPlus";
 function App() {
     return (
         <>
-        <BrowserRouter>
+        <BrowserRouter basename="weather-app">
         <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />

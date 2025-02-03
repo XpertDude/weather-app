@@ -2,10 +2,13 @@ import { useContext } from "react";
 import weatherContext from "./weatherContext";
 export default function ForecastDays() {
     const data = useContext(weatherContext)
-    if (!data?.forecastday) return <h1>No forecast data available.</h1>;
+    const status = data.data.forecast.forecastday;
+    console.log(status);
+    
+    if (!status) return <h1>No forecast data available.</h1>;
     return (
         <>
-            {data.forecastday.map((e, index) => (
+            {status.map((e, index) => (
                 <div
                     key={index}
                     className="d-flex flex-column align-items-center border rounded p-2 bg-white"
