@@ -14,7 +14,6 @@ export default function Weather() {
     const [searchValue, setValue] = useState("");
     const [loading, setLoading] = useState(false);
     const [view, setView] = useState("day");
-    console.log(error);
     useEffect(() => {
         if (city && city.trim() !== "") {
             setLoading(true);
@@ -38,7 +37,7 @@ export default function Weather() {
                     setLoading(false);
                 });
         }
-        
+
     }, [city]);
 
     const loadingSpinner = () => {
@@ -82,64 +81,64 @@ export default function Weather() {
         </div>
     }
 
-const showError = () => {
-    return <>
-    {!error == '' && <div
+    const showError = () => {
+        return <>
+            {!error == '' && <div
                 className="alert alert-danger"
                 role="alert"
             >
                 <strong>{error}</strong>
             </div>}
-    </>
-}
+        </>
+    }
 
     return (
         <>
-        <Header />
-        <weatherContext.Provider value={{ data }}>
-        <h1>Weather Information</h1>
-            <hr />
-            {showError()}
-            {loading? loadingSpinner(): undefined}
-            <div className="d-flex gap-2 flex-row justify-content-between p-1">
-                <div className="d-flex gap-2">
-                    <button
-                        onClick={() => handleViewChange("day")}
-                        className={view === "day" ? "btn btn-primary" : "btn btn-secondary"}>
-                        Today
-                    </button>
-                    <button
-                        onClick={() => handleViewChange("week")}
-                        className={view === "week" ? "btn btn-primary" : "btn btn-secondary"}>
-                        Week
-                    </button>
+            <Header />
+            <weatherContext.Provider value={{ data }}>
+                <h1>Weather Information</h1>
+                <hr />
+                {showError()}
+                {loading ? loadingSpinner() : undefined}
+                <div className="d-flex gap-2 flex-row justify-content-between p-1">
+                    <div className="d-flex gap-2">
+                        <button
+                            onClick={() => handleViewChange("day")}
+                            className={view === "day" ? "btn btn-primary" : "btn btn-secondary"}>
+                            Today
+                        </button>
+                        <button
+                            onClick={() => handleViewChange("week")}
+                            className={view === "week" ? "btn btn-primary" : "btn btn-secondary"}>
+                            Week
+                        </button>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                        <input
+                            className="w-100 border border-none"
+                            type="text"
+                            onChange={handleCityValue}
+                            placeholder="Search by city"
+                        />
+                        <Button
+                            className="btn-sm mx-2 h-12 "
+                            type="submit"
+                            onClick={handleCity}
+                        >
+                            Search
+                        </Button>
+                    </div>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <input
-                        className="w-100 border border-none"
-                        type="text"
-                        onChange={handleCityValue}
-                        placeholder="Search by city"
-                    />
-                    <Button
-                        className="btn-sm mx-2 h-12 "
-                        type="submit"
-                        onClick={handleCity}
-                    >
-                        Search
-                    </Button>
-                </div>
-            </div>
-            <section className="row align-items-center border rounded bg-light h-50 p-2">
-                <div className="d-flex justify-content-center flex-row col-4 p-2">
-                    {<ShowWeather />}
-                </div>
-                <div className=" col-6 container d-flex flex-wrap gap-5  p-2">
-                    {view === "day" && data.current && <ShowWeatherInfoPlus/>}
-                    {view === "week" && data.forecast && <ForecastDays />}
-                </div>
-            </section>
-        </weatherContext.Provider>
+                <section className="row align-items-center border rounded bg-light h-50 p-2">
+                    <div className="d-flex justify-content-center flex-row col-4 p-2">
+                        {<ShowWeather />}
+                    </div>
+                    <div className=" col-6 container d-flex flex-wrap gap-5  p-2">
+                        {view === "day" && data.current && <ShowWeatherInfoPlus />}
+                        {view === "week" && data.forecast && <ForecastDays />}
+                    </div>
+                </section>
+            </weatherContext.Provider>
         </>
     );
 }
